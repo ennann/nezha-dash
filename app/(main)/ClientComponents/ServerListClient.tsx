@@ -29,12 +29,14 @@ export default function ServerListClient() {
 
   const [tag, setTag] = useState<string>(defaultTag);
   const [showMap, setShowMap] = useState<boolean>(false);
-  const [inline, setInline] = useState<string>("0");
+  const [inline, setInline] = useState<string | null>(null);
 
   useEffect(() => {
     const inlineState = localStorage.getItem("inline");
     if (inlineState !== null) {
       setInline(inlineState);
+    } else {
+      setInline(window.matchMedia("(min-width: 1024px)").matches ? "1" : "0");
     }
   }, []);
 
@@ -85,6 +87,7 @@ export default function ServerListClient() {
     );
 
   if (!data?.result) return null;
+  if (inline === null) return null;
 
   const { result } = data;
   const sortedServers = result.sort((a, b) => {

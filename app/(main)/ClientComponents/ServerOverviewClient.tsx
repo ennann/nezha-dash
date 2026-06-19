@@ -110,35 +110,31 @@ export default function ServerOverviewClient() {
         <Card
           onClick={() => {
             setFilter(false);
-            setStatus("offline");
+            setStatus("all");
           }}
-          className={cn(
-            "cursor-pointer hover:ring-red-500 ring-1 ring-transparent transition-all",
-            {
-              "ring-red-500 ring-2 border-transparent": status === "offline",
-            },
-          )}
+          className={cn("cursor-pointer hover:ring-blue-500 ring-1 ring-transparent transition-all")}
         >
           <CardContent className="flex h-full items-center px-6 py-3">
-            <section className="flex flex-col gap-1">
+            <section className="flex flex-col gap-1 w-full">
               <p className="text-sm font-medium md:text-base">
-                {t("p_2532-2599_Offlineservers")}
+                流量
               </p>
-              <div className="flex items-center gap-2">
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75"></span>
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-red-500"></span>
-                </span>
-                {data?.result ? (
-                  <div className="text-lg font-semibold">
-                    {data?.offline_servers}
-                  </div>
-                ) : (
-                  <div className="flex h-7 items-center">
-                    <Loader visible={true} />
-                  </div>
-                )}
-              </div>
+              {data?.result ? (
+                <section className="flex flex-col gap-1 lg:flex-row lg:items-center lg:gap-2">
+                  <p className="text-[11px] flex items-center text-nowrap font-semibold text-blue-800 dark:text-blue-400">
+                    <ArrowUpCircleIcon className="size-3 mr-1" />
+                    {formatBytes(data?.total_out_bandwidth)}
+                  </p>
+                  <p className="text-[11px] flex items-center text-nowrap font-semibold text-purple-800 dark:text-purple-400">
+                    <ArrowDownCircleIcon className="size-3 mr-1" />
+                    {formatBytes(data?.total_in_bandwidth)}
+                  </p>
+                </section>
+              ) : (
+                <div className="flex h-[38px] items-center">
+                  <Loader visible={true} />
+                </div>
+              )}
             </section>
           </CardContent>
         </Card>
@@ -158,27 +154,19 @@ export default function ServerOverviewClient() {
             <section className="flex flex-col gap-1 w-full">
               <div className="flex items-center w-full justify-between">
                 <p className="text-sm font-medium md:text-base">
-                  {t("network")}
+                  速度
                 </p>
               </div>
               {data?.result ? (
                 <>
-                  <section className="flex items-start flex-row z-[999] pr-2 sm:pr-0 gap-1">
-                    <p className="sm:text-[12px] text-[10px] text-blue-800 dark:text-blue-400   text-nowrap font-medium">
-                      ↑{formatBytes(data?.total_out_bandwidth)}
-                    </p>
-                    <p className="sm:text-[12px] text-[10px]  text-purple-800 dark:text-purple-400  text-nowrap font-medium">
-                      ↓{formatBytes(data?.total_in_bandwidth)}
-                    </p>
-                  </section>
-                  <section className="flex flex-col sm:flex-row -mr-1 sm:items-center items-start gap-1">
+                  <section className="flex flex-col -mr-1 items-start gap-1 lg:flex-row lg:items-center lg:gap-2">
                     <p className="text-[11px] flex items-center text-nowrap font-semibold">
                       <ArrowUpCircleIcon className="size-3 mr-0.5 sm:mb-[1px]" />
-                      {formatBytes(data?.total_out_speed)}/s
+                      {`${formatBytes(data?.total_out_speed)}/s`}
                     </p>
                     <p className="text-[11px] flex items-center  text-nowrap font-semibold">
                       <ArrowDownCircleIcon className="size-3 mr-0.5" />
-                      {formatBytes(data?.total_in_speed)}/s
+                      {`${formatBytes(data?.total_in_speed)}/s`}
                     </p>
                   </section>
                 </>

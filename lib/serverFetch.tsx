@@ -3,6 +3,7 @@
 import { NezhaAPI, ServerApi } from "@/app/types/nezha-api";
 import { MakeOptional } from "@/app/types/utils";
 import getEnv from "@/lib/env-entry";
+import { GetNezhaV2Data } from "@/lib/nezha-v2";
 import { unstable_noStore as noStore } from "next/cache";
 
 export async function GetNezhaData() {
@@ -16,6 +17,10 @@ export async function GetNezhaData() {
 
   // Remove trailing slash
   nezhaBaseUrl = nezhaBaseUrl.replace(/\/$/, "");
+
+  if (getEnv("NezhaApiMode") === "v2") {
+    return GetNezhaV2Data(nezhaBaseUrl);
+  }
 
   try {
     const response = await fetch(`${nezhaBaseUrl}/api/v1/server/details`, {

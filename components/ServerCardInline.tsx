@@ -1,13 +1,10 @@
 import { NezhaAPISafe } from "@/app/types/nezha-api";
+import BillingSummary from "@/components/BillingSummary";
 import ServerFlag from "@/components/ServerFlag";
 import ServerUsageBar from "@/components/ServerUsageBar";
 import { Card } from "@/components/ui/card";
 import getEnv from "@/lib/env-entry";
-import {
-  GetFontLogoClass,
-  GetOsName,
-  MageMicrosoftWindows,
-} from "@/lib/logo-class";
+import { formatSpeedCompact } from "@/lib/server-display";
 import { cn, formatBytes, formatNezhaInfo } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -20,7 +17,7 @@ export default function ServerCardInline({
   serverInfo: NezhaAPISafe;
 }) {
   const t = useTranslations("ServerCard");
-  const { id, name, country_code, online, cpu, up, down, mem, stg, host } =
+  const { id, name, country_code, online, cpu, mem, stg } =
     formatNezhaInfo(serverInfo);
 
   const showFlag = getEnv("NEXT_PUBLIC_ShowFlag") === "true";
@@ -49,43 +46,25 @@ export default function ServerCardInline({
           >
             {showFlag ? <ServerFlag country_code={country_code} /> : null}
           </div>
-          <div className="relative w-28">
+          <div className="relative flex w-28 flex-col gap-1">
             <p
               className={cn(
-                "break-all font-bold tracking-tight",
+                "break-normal font-bold tracking-tight",
                 showFlag ? "text-xs " : "text-sm",
               )}
             >
               {name}
             </p>
+            <BillingSummary serverInfo={serverInfo} compact />
           </div>
         </section>
         <Separator orientation="vertical" className="h-8 mx-0 ml-2" />
-        <div className="flex flex-col gap-2">
-          <section className={cn("grid grid-cols-9 items-center gap-3 flex-1")}>
-            <div
-              className={"items-center flex flex-row gap-2 whitespace-nowrap"}
-            >
-              <div className="text-xs font-semibold">
-                {host.Platform.includes("Windows") ? (
-                  <MageMicrosoftWindows className="size-[10px]" />
-                ) : (
-                  <p className={`fl-${GetFontLogoClass(host.Platform)}`} />
-                )}
-              </div>
-              <div className={"flex w-14 flex-col"}>
-                <p className="text-xs text-muted-foreground">{t("System")}</p>
-                <div className="flex items-center text-[10.5px] font-semibold">
-                  {host.Platform.includes("Windows")
-                    ? "Windows"
-                    : GetOsName(host.Platform)}
-                </div>
-              </div>
-            </div>
+        <div className="flex flex-col gap-1">
+          <section className={cn("grid grid-cols-8 items-center gap-3 flex-1")}>
             <div className={"flex w-20 flex-col"}>
               <p className="text-xs text-muted-foreground">{t("Uptime")}</p>
               <div className="flex items-center text-xs font-semibold">
-                {(serverInfo?.status.Uptime / 86400).toFixed(0)} {"Days"}
+                {(serverInfo?.status.Uptime / 86400).toFixed(0)} 天
               </div>
             </div>
             <div className={"flex w-14 flex-col"}>
@@ -112,17 +91,13 @@ export default function ServerCardInline({
             <div className={"flex w-16 flex-col"}>
               <p className="text-xs text-muted-foreground">{t("Upload")}</p>
               <div className="flex items-center text-xs font-semibold">
-                {up >= 1024
-                  ? `${(up / 1024).toFixed(2)}G/s`
-                  : `${up.toFixed(2)}M/s`}
+                {formatSpeedCompact(serverInfo.status.NetOutSpeed)}
               </div>
             </div>
             <div className={"flex w-16 flex-col"}>
               <p className="text-xs text-muted-foreground">{t("Download")}</p>
               <div className="flex items-center text-xs font-semibold">
-                {down >= 1024
-                  ? `${(down / 1024).toFixed(2)}G/s`
-                  : `${down.toFixed(2)}M/s`}
+                {formatSpeedCompact(serverInfo.status.NetInSpeed)}
               </div>
             </div>
             <div className={"flex w-20 flex-col"}>
@@ -164,15 +139,16 @@ export default function ServerCardInline({
         >
           {showFlag ? <ServerFlag country_code={country_code} /> : null}
         </div>
-        <div className="relative w-28">
+        <div className="relative flex w-28 flex-col gap-1">
           <p
             className={cn(
-              "break-all font-bold tracking-tight",
+              "break-normal font-bold tracking-tight",
               showFlag ? "text-xs" : "text-sm",
             )}
           >
             {name}
           </p>
+          <BillingSummary serverInfo={serverInfo} compact />
         </div>
       </section>
     </Card>

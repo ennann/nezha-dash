@@ -1,4 +1,5 @@
 import { NezhaAPISafe } from "@/app/types/nezha-api";
+import BillingSummary from "@/components/BillingSummary";
 import ServerFlag from "@/components/ServerFlag";
 import ServerUsageBar from "@/components/ServerUsageBar";
 import { Badge } from "@/components/ui/badge";
@@ -9,6 +10,7 @@ import {
   GetOsName,
   MageMicrosoftWindows,
 } from "@/lib/logo-class";
+import { formatSpeedCompact } from "@/lib/server-display";
 import { cn, formatBytes, formatNezhaInfo } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -19,7 +21,7 @@ export default function ServerCard({
   serverInfo: NezhaAPISafe;
 }) {
   const t = useTranslations("ServerCard");
-  const { id, name, country_code, online, cpu, up, down, mem, stg, host } =
+  const { id, name, country_code, online, cpu, mem, stg, host } =
     formatNezhaInfo(serverInfo);
 
   const showFlag = getEnv("NEXT_PUBLIC_ShowFlag") === "true";
@@ -60,12 +62,13 @@ export default function ServerCard({
           <div className="relative">
             <p
               className={cn(
-                "break-all font-bold tracking-tight",
+                "break-normal font-bold tracking-tight",
                 showFlag ? "text-xs " : "text-sm",
               )}
             >
               {name}
             </p>
+            <BillingSummary serverInfo={serverInfo} />
           </div>
         </section>
         <div className="flex flex-col gap-2">
@@ -121,17 +124,13 @@ export default function ServerCard({
             <div className={"flex w-14 flex-col"}>
               <p className="text-xs text-muted-foreground">{t("Upload")}</p>
               <div className="flex items-center text-xs font-semibold">
-                {up >= 1024
-                  ? `${(up / 1024).toFixed(2)}G/s`
-                  : `${up.toFixed(2)}M/s`}
+                {formatSpeedCompact(serverInfo.status.NetOutSpeed)}
               </div>
             </div>
             <div className={"flex w-14 flex-col"}>
               <p className="text-xs text-muted-foreground">{t("Download")}</p>
               <div className="flex items-center text-xs font-semibold">
-                {down >= 1024
-                  ? `${(down / 1024).toFixed(2)}G/s`
-                  : `${down.toFixed(2)}M/s`}
+                {formatSpeedCompact(serverInfo.status.NetInSpeed)}
               </div>
             </div>
           </section>
@@ -185,12 +184,13 @@ export default function ServerCard({
         <div className="relative">
           <p
             className={cn(
-              "break-all font-bold tracking-tight",
+              "break-normal font-bold tracking-tight",
               showFlag ? "text-xs" : "text-sm",
             )}
           >
             {name}
           </p>
+          <BillingSummary serverInfo={serverInfo} />
         </div>
       </section>
     </Card>

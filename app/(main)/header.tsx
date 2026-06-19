@@ -2,7 +2,6 @@
 
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ModeToggle } from "@/components/ThemeSwitcher";
-import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import getEnv from "@/lib/env-entry";
 import { DateTime } from "luxon";
@@ -11,10 +10,10 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 
 function Header() {
-  const t = useTranslations("Header");
   const customLogo = getEnv("NEXT_PUBLIC_CustomLogo");
   const customTitle = getEnv("NEXT_PUBLIC_CustomTitle");
   const customDescription = getEnv("NEXT_PUBLIC_CustomDescription");
+  const showDescription = Boolean(customDescription?.trim());
 
   const router = useRouter();
 
@@ -45,15 +44,14 @@ function Header() {
             />
           </div>
           {customTitle ? customTitle : "NezhaDash"}
-          <Separator
-            orientation="vertical"
-            className="mx-2 hidden h-4 w-[1px] md:block"
-          />
-          <p className="hidden text-sm font-medium opacity-40 md:block">
-            {customDescription
-              ? customDescription
-              : t("p_1079-1199_Simpleandbeautifuldashbo")}
-          </p>
+          {showDescription && (
+            <>
+              <span className="mx-2 hidden h-4 w-[1px] bg-border md:block" />
+              <p className="hidden text-sm font-medium opacity-40 md:block">
+                {customDescription}
+              </p>
+            </>
+          )}
         </section>
         <section className="flex items-center gap-2">
           <Links />
