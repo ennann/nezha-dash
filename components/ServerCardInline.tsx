@@ -33,20 +33,20 @@ export default function ServerCardInline({
           "flex items-center lg:flex-row justify-start gap-3 p-3 md:px-5 cursor-pointer hover:bg-accent/50 transition-colors min-w-[900px] w-full",
         )}
       >
-        <section
-          className={cn("grid items-center gap-2 lg:w-36")}
-          style={{ gridTemplateColumns: "auto auto 1fr" }}
-        >
-          <span className="h-2 w-2 shrink-0 rounded-full bg-green-500 self-center"></span>
+        <section className={cn("flex w-44 flex-col gap-1")}>
           <div
-            className={cn(
-              "flex items-center justify-center",
-              showFlag ? "min-w-[17px]" : "min-w-0",
-            )}
+            className="grid items-center gap-2"
+            style={{ gridTemplateColumns: "auto auto 1fr" }}
           >
-            {showFlag ? <ServerFlag country_code={country_code} /> : null}
-          </div>
-          <div className="relative flex w-28 flex-col gap-1">
+            <span className="h-2 w-2 shrink-0 rounded-full bg-green-500 self-center"></span>
+            <div
+              className={cn(
+                "flex items-center justify-center",
+                showFlag ? "min-w-[17px]" : "min-w-0",
+              )}
+            >
+              {showFlag ? <ServerFlag country_code={country_code} /> : null}
+            </div>
             <p
               className={cn(
                 "break-normal font-bold tracking-tight",
@@ -55,12 +55,19 @@ export default function ServerCardInline({
             >
               {name}
             </p>
-            <BillingSummary serverInfo={serverInfo} compact />
           </div>
+          <BillingSummary serverInfo={serverInfo} compact showMeter={false} />
         </section>
         <Separator orientation="vertical" className="h-8 mx-0 ml-2" />
         <div className="flex flex-col gap-1">
-          <section className={cn("grid grid-cols-8 items-center gap-3 flex-1")}>
+          <section className={cn("grid grid-cols-9 items-center gap-3 flex-1")}>
+            <div className={"flex w-24 flex-col"}>
+              <BillingSummary
+                serverInfo={serverInfo}
+                compact
+                showTags={false}
+              />
+            </div>
             <div className={"flex w-20 flex-col"}>
               <p className="text-xs text-muted-foreground">{t("Uptime")}</p>
               <div className="flex items-center text-xs font-semibold">
@@ -126,20 +133,20 @@ export default function ServerCardInline({
         "flex items-center justify-start gap-3 p-3 md:px-5 min-h-[61px] min-w-[900px] flex-row",
       )}
     >
-      <section
-        className={cn("grid items-center gap-2 lg:w-40")}
-        style={{ gridTemplateColumns: "auto auto 1fr" }}
-      >
-        <span className="h-2 w-2 shrink-0 rounded-full bg-red-500 self-center"></span>
+      <section className={cn("flex w-44 flex-col gap-1")}>
         <div
-          className={cn(
-            "flex items-center justify-center",
-            showFlag ? "min-w-[17px]" : "min-w-0",
-          )}
+          className="grid items-center gap-2"
+          style={{ gridTemplateColumns: "auto auto 1fr" }}
         >
-          {showFlag ? <ServerFlag country_code={country_code} /> : null}
-        </div>
-        <div className="relative flex w-28 flex-col gap-1">
+          <span className="h-2 w-2 shrink-0 rounded-full bg-red-500 self-center"></span>
+          <div
+            className={cn(
+              "flex items-center justify-center",
+              showFlag ? "min-w-[17px]" : "min-w-0",
+            )}
+          >
+            {showFlag ? <ServerFlag country_code={country_code} /> : null}
+          </div>
           <p
             className={cn(
               "break-normal font-bold tracking-tight",
@@ -148,8 +155,8 @@ export default function ServerCardInline({
           >
             {name}
           </p>
-          <BillingSummary serverInfo={serverInfo} compact />
         </div>
+        <BillingSummary serverInfo={serverInfo} compact showMeter={false} />
       </section>
     </Card>
   );

@@ -5,6 +5,7 @@ import { Loader } from "@/components/loading/Loader";
 import { Card, CardContent } from "@/components/ui/card";
 import getEnv from "@/lib/env-entry";
 import { useFilter } from "@/lib/network-filter-context";
+import { formatSpeedCompact } from "@/lib/server-display";
 import { useStatus } from "@/lib/status-context";
 import { cn, formatBytes, nezhaFetcher } from "@/lib/utils";
 import blogMan from "@/public/blog-man.webp";
@@ -115,17 +116,17 @@ export default function ServerOverviewClient() {
           className={cn("cursor-pointer hover:ring-blue-500 ring-1 ring-transparent transition-all")}
         >
           <CardContent className="flex h-full items-center px-6 py-3">
-            <section className="flex flex-col gap-1 w-full">
+            <section className="flex flex-col gap-1 w-full min-w-0">
               <p className="text-sm font-medium md:text-base">
                 流量
               </p>
               {data?.result ? (
-                <section className="flex flex-col gap-1 lg:flex-row lg:items-center lg:gap-2">
-                  <p className="text-[11px] flex items-center text-nowrap font-semibold text-blue-800 dark:text-blue-400">
+                <section className="flex min-w-0 flex-col gap-1 lg:flex-row lg:items-center lg:gap-2 lg:overflow-hidden">
+                  <p className="flex items-center text-nowrap text-[11px] font-semibold text-blue-800 dark:text-blue-400 lg:shrink-0">
                     <ArrowUpCircleIcon className="size-3 mr-1" />
                     {formatBytes(data?.total_out_bandwidth)}
                   </p>
-                  <p className="text-[11px] flex items-center text-nowrap font-semibold text-purple-800 dark:text-purple-400">
+                  <p className="flex items-center text-nowrap text-[11px] font-semibold text-purple-800 dark:text-purple-400 lg:shrink-0">
                     <ArrowDownCircleIcon className="size-3 mr-1" />
                     {formatBytes(data?.total_in_bandwidth)}
                   </p>
@@ -151,7 +152,7 @@ export default function ServerOverviewClient() {
           )}
         >
           <CardContent className="flex h-full items-center relative px-6 py-3">
-            <section className="flex flex-col gap-1 w-full">
+            <section className="flex flex-col gap-1 w-full min-w-0">
               <div className="flex items-center w-full justify-between">
                 <p className="text-sm font-medium md:text-base">
                   速度
@@ -159,14 +160,14 @@ export default function ServerOverviewClient() {
               </div>
               {data?.result ? (
                 <>
-                  <section className="flex flex-col -mr-1 items-start gap-1 lg:flex-row lg:items-center lg:gap-2">
-                    <p className="text-[11px] flex items-center text-nowrap font-semibold">
+                  <section className="flex min-w-0 flex-col -mr-1 items-start gap-1 lg:flex-row lg:items-center lg:gap-2 lg:overflow-hidden">
+                    <p className="flex items-center text-nowrap text-[11px] font-semibold lg:shrink-0">
                       <ArrowUpCircleIcon className="size-3 mr-0.5 sm:mb-[1px]" />
-                      {`${formatBytes(data?.total_out_speed)}/s`}
+                      {formatSpeedCompact(data?.total_out_speed ?? 0)}
                     </p>
-                    <p className="text-[11px] flex items-center  text-nowrap font-semibold">
+                    <p className="flex items-center text-nowrap text-[11px] font-semibold lg:shrink-0">
                       <ArrowDownCircleIcon className="size-3 mr-0.5" />
-                      {`${formatBytes(data?.total_in_speed)}/s`}
+                      {formatSpeedCompact(data?.total_in_speed ?? 0)}
                     </p>
                   </section>
                 </>

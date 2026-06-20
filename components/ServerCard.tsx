@@ -1,5 +1,5 @@
 import { NezhaAPISafe } from "@/app/types/nezha-api";
-import BillingSummary from "@/components/BillingSummary";
+import BillingSummary, { BillingMeter } from "@/components/BillingSummary";
 import ServerFlag from "@/components/ServerFlag";
 import ServerUsageBar from "@/components/ServerUsageBar";
 import { Badge } from "@/components/ui/badge";
@@ -48,7 +48,7 @@ export default function ServerCard({
           className={cn("grid items-center gap-2", {
             "lg:w-40": !fixedTopServerName,
           })}
-          style={{ gridTemplateColumns: "auto auto 1fr" }}
+          style={{ gridTemplateColumns: "auto auto auto" }}
         >
           <span className="h-2 w-2 shrink-0 rounded-full bg-green-500 self-center"></span>
           <div
@@ -59,7 +59,7 @@ export default function ServerCard({
           >
             {showFlag ? <ServerFlag country_code={country_code} /> : null}
           </div>
-          <div className="relative">
+          <div className="relative min-w-0">
             <p
               className={cn(
                 "break-normal font-bold tracking-tight",
@@ -68,10 +68,15 @@ export default function ServerCard({
             >
               {name}
             </p>
-            <BillingSummary serverInfo={serverInfo} />
           </div>
         </section>
-        <div className="flex flex-col gap-2">
+        <BillingMeter
+          serverInfo={serverInfo}
+          layout="inline"
+          showInlineLabels
+          className="w-full justify-center"
+        />
+        <div className="flex w-full flex-col gap-2">
           <section
             className={cn("grid grid-cols-5 items-center gap-3", {
               "lg:grid-cols-6 lg:gap-4": fixedTopServerName,
@@ -150,6 +155,12 @@ export default function ServerCard({
               </Badge>
             </section>
           )}
+          <BillingSummary
+            serverInfo={serverInfo}
+            showMeter={false}
+            className="w-full"
+            tagsClassName="justify-center"
+          />
         </div>
       </Card>
     </Link>
@@ -170,7 +181,7 @@ export default function ServerCard({
         className={cn("grid items-center gap-2", {
           "lg:w-40": !fixedTopServerName,
         })}
-        style={{ gridTemplateColumns: "auto auto 1fr" }}
+        style={{ gridTemplateColumns: "auto auto auto" }}
       >
         <span className="h-2 w-2 shrink-0 rounded-full bg-red-500 self-center"></span>
         <div
@@ -181,7 +192,7 @@ export default function ServerCard({
         >
           {showFlag ? <ServerFlag country_code={country_code} /> : null}
         </div>
-        <div className="relative">
+        <div className="relative min-w-0">
           <p
             className={cn(
               "break-normal font-bold tracking-tight",
@@ -190,9 +201,20 @@ export default function ServerCard({
           >
             {name}
           </p>
-          <BillingSummary serverInfo={serverInfo} />
         </div>
       </section>
+      <BillingMeter
+        serverInfo={serverInfo}
+        layout="inline"
+        showInlineLabels
+        className="w-full justify-center"
+      />
+      <BillingSummary
+        serverInfo={serverInfo}
+        showMeter={false}
+        className="w-full"
+        tagsClassName="justify-center"
+      />
     </Card>
   );
 }
