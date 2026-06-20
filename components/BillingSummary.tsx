@@ -107,7 +107,7 @@ export function BillingMeter({
         </span>
         <span className="shrink-0">
           {showInlineLabels ? "剩余天数: " : ""}
-          {billing.remaining}
+          <BillingRemainingText value={billing.remaining} />
         </span>
         <BillingBar progress={billing.progress} className="w-[70px] shrink-0" />
       </div>
