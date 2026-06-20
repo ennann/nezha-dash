@@ -1,4 +1,5 @@
 import { NezhaAPISafe } from "@/app/types/nezha-api";
+import { Progress } from "@/components/ui/progress";
 import {
   billingBarClass,
   getBillingInfo,
@@ -114,16 +115,29 @@ export function BillingMeter({
   }
 
   return (
-    <div className={cn("flex flex-col gap-0.5", className)}>
+    <div className={cn("flex flex-col", className)}>
       {label ? (
         <p className="text-xs text-muted-foreground">{label}</p>
       ) : null}
-      <p className="truncate text-xs text-muted-foreground">{billing.price}</p>
-      <div className="flex items-center truncate text-xs font-semibold">
-        {billing.remaining}
+      <p className="truncate text-xs leading-4 text-muted-foreground">
+        {billing.price}
+      </p>
+      <div className="flex h-4 items-center truncate text-xs font-semibold leading-4">
+        <BillingRemainingText value={billing.remaining} />
       </div>
       <BillingBar progress={billing.progress} className="w-full" />
     </div>
+  );
+}
+
+function BillingRemainingText({ value }: { value: string }) {
+  if (value !== "+∞") return value;
+
+  return (
+    <span className="inline-flex items-center leading-none">
+      <span className="leading-none">+</span>
+      <span className="pl-[1px] text-[13px] leading-none">∞</span>
+    </span>
   );
 }
 
@@ -135,16 +149,12 @@ function BillingBar({
   className?: string;
 }) {
   return (
-    <div
-      className={cn(
-        "h-[3px] w-[70px] overflow-hidden rounded-sm bg-secondary",
-        className,
-      )}
-    >
-      <div
-        className={cn("h-full transition-all", billingBarClass(progress))}
-        style={{ width: `${progress}%` }}
-      />
-    </div>
+    <Progress
+      aria-label={"Billing Remaining Bar"}
+      aria-labelledby={"Billing Remaining Bar"}
+      value={progress}
+      indicatorClassName={billingBarClass(progress)}
+      className={cn("h-[3px] w-[70px] rounded-sm", className)}
+    />
   );
 }
