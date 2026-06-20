@@ -70,12 +70,9 @@ export default function ServerCard({
             </p>
           </div>
         </section>
-        <BillingMeter
-          serverInfo={serverInfo}
-          layout="inline"
-          showInlineLabels
-          className="w-full justify-center"
-        />
+        <div className="flex w-full justify-center">
+          <BillingMeter serverInfo={serverInfo} className="w-24 text-center" />
+        </div>
         <div className="flex w-full flex-col gap-2">
           <section
             className={cn("grid grid-cols-5 items-center gap-3", {
@@ -203,12 +200,9 @@ export default function ServerCard({
           </p>
         </div>
       </section>
-      <BillingMeter
-        serverInfo={serverInfo}
-        layout="inline"
-        showInlineLabels
-        className="w-full justify-center"
-      />
+      <div className="flex w-full justify-center">
+        <BillingMeter serverInfo={serverInfo} className="w-24 text-center" />
+      </div>
       <BillingSummary
         serverInfo={serverInfo}
         showMeter={false}

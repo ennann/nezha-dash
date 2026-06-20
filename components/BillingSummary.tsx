@@ -40,7 +40,6 @@ export default function BillingSummary({
       {showMeter && (
         <BillingMeter
           serverInfo={serverInfo}
-          compact={compact}
           layout={meterLayout}
           label={label}
           showInlineLabels={showInlineLabels}
@@ -66,7 +65,7 @@ export function BillingTags({
         <span
           key={`${tag}-${index}`}
           className={cn(
-            "w-fit rounded-[5px] border px-[4px] py-[1.5px] text-[9px] leading-none",
+            "w-fit shrink-0 rounded-[5px] border px-[4px] py-[1.5px] text-[9px] leading-none",
             tagClassName(index),
           )}
         >
@@ -79,14 +78,12 @@ export function BillingTags({
 
 export function BillingMeter({
   serverInfo,
-  compact = false,
   layout = "stacked",
   label,
   showInlineLabels = false,
   className,
 }: {
   serverInfo: NezhaAPISafe;
-  compact?: boolean;
   layout?: "stacked" | "inline";
   label?: string;
   showInlineLabels?: boolean;
@@ -121,16 +118,11 @@ export function BillingMeter({
       {label ? (
         <p className="text-xs text-muted-foreground">{label}</p>
       ) : null}
-      <div
-        className={cn(
-          "flex items-center gap-2 font-medium text-muted-foreground",
-          compact ? "text-[10px]" : "text-[10px]",
-        )}
-      >
-        <span>{billing.price}</span>
-        <span>{billing.remaining}</span>
+      <p className="truncate text-xs text-muted-foreground">{billing.price}</p>
+      <div className="flex items-center truncate text-xs font-semibold">
+        {billing.remaining}
       </div>
-      <BillingBar progress={billing.progress} />
+      <BillingBar progress={billing.progress} className="w-full" />
     </div>
   );
 }
